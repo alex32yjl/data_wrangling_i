@@ -7,7 +7,7 @@ output: github_document
 library(tidyverse)
 ```
 
-## pivot_longer 
+## Pivot_longer 
 load the PULSE data
 ```{r}
 pulse_data = haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") %>% janitor::clean_names()
@@ -30,8 +30,18 @@ pulse_data = haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat"
 
 ```
 
+## Pivot_wider 
+Make up some data 
 ```{r}
+analysis_result = tibble(
+  group = c("treatment", "treatment", "placebo", "placebo"),
+  time = c("pre", "post", "pre", "post"),
+  mean = c(4, 8, 3.5, 4))
 
+pivot_wider(
+  analysis_result, 
+  names_from = "time", 
+  values_from = "mean")
 ```
 
 
