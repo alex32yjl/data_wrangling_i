@@ -1,0 +1,47 @@
+---
+title: "tidy data"
+output: github_document
+---
+
+```{r setup}
+library(tidyverse)
+```
+
+## pivot_longer 
+load the PULSE data
+```{r}
+pulse_data = haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") %>% janitor::clean_names()
+```
+
+Is the tidy here same as rbind()?
+Wide format to long format
+```{r }
+pulse_data_tidy = pulse_data %>% pivot_longer(bdi_score_bl:bdi_score_12m, names_to = "visit", names_prefix = "bdi_score_", values_to = "bdi")
+```
+
+rewrite, combine and extent(to add a mutate)
+  stack the bdi score
+  formalize the "visit" variable
+```{r}
+pulse_data = haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") %>% janitor::clean_names() %>%
+  pivot_longer(bdi_score_bl:bdi_score_12m, names_to = "visit", names_prefix = "bdi_score_", values_to = "bdi") %>% 
+  relocate(id, visit) %>% 
+  mutate(visit = recode(visit, "bl" = "00m"))
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
