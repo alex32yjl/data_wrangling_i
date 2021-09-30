@@ -74,6 +74,27 @@ lotr_tidy = bind_rows(fellowship_ring, two_towers, return_king) %>%
 
 
 ## Joining datasets 
-```{r}
+```{r import data}
+pups_df = read_csv("./data_import_examples/FAS_pups.csv")
+litters_df = read_csv("./data_import_examples/FAS_litters.csv")
 ```
 
+**mutate** with `spec()` to specify number  
+**separate** 1 group into 2 by separating after 3 characters of this variable
+```{r clean data}
+pups_df = read_csv("./data_import_examples/FAS_pups.csv") %>% 
+  janitor::clean_names() %>%
+  mutate(sex = recode(sex, `1` = "male", `2` = "female"),sex = factor(sex))
+
+litters_df = read_csv("./data_import_examples/FAS_litters.csv") %>%
+  janitor::clean_names() %>%
+  relocate(litter_number) %>% 
+  separate(group, into = c("dose", "day_of_tx"), sep = 3)
+```
+
+merge litters data into pups data
+```{r joining}
+fas_data = left_join(pup_data, litter_data, by = "litter_number") %>% 
+  arrange(litter_number) %>%
+  relocate(litter_number, dose, day_of_tx)
+```
